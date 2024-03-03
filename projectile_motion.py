@@ -24,7 +24,6 @@ def draw_circles(circles):
     for circle in circles:
         pygame.draw.circle(screen, GREY, (int(circle.body.position.x), int(circle.body.position.y)), int(circle.radius))
 
-
 def run(circles):
     while True:
         width = screen.get_width()
