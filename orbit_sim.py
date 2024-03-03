@@ -9,15 +9,15 @@ CONST_RADIUS_EARTH_M = 6_378_000
 CONST_MASS_SUN_KG = 2e+30
 CONST_MASS_EARTH_KG = 6e+24
 
-pygame.init()
-screen = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
-screen_width = screen.get_width()
-screen_height = screen.get_height()
-clock = pygame.time.Clock()
-space = pymunk.Space()
-space.gravity = (0.0, 0.0)
+def init():
+    pygame.init()
+    screen = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
+    clock = pygame.time.Clock()
+    space = pymunk.Space()
+    space.gravity = (0.0, 0.0)
+    return screen, clock, space
 
-def create_star(mass_kg = CONST_MASS_SUN_KG, radius_m = CONST_RADIUS_SUN_M, pos_x = screen_width / 2, pos_y = screen_height / 2):
+def create_star(mass_kg = CONST_MASS_SUN_KG, radius_m = CONST_RADIUS_SUN_M, pos_x = 800, pos_y = 800):
     body = pymunk.Body(mass_kg, 1, pymunk.Body.DYNAMIC)
     body.position = (pos_x, pos_y)
     radius_px = radius_m / CONST_M_PER_PIXEL
@@ -25,7 +25,7 @@ def create_star(mass_kg = CONST_MASS_SUN_KG, radius_m = CONST_RADIUS_SUN_M, pos_
     space.add(body, shape)
     return shape
 
-def create_planet(mass_kg = CONST_MASS_EARTH_KG, radius_m = CONST_RADIUS_EARTH_M, pos_x = screen_width / 2 - CONST_M_PER_AU / CONST_M_PER_PIXEL, pos_y = screen_height / 2, velocity_mps = 30000):
+def create_planet(mass_kg = CONST_MASS_EARTH_KG, radius_m = CONST_RADIUS_EARTH_M, pos_x = 800 - CONST_M_PER_AU / CONST_M_PER_PIXEL, pos_y = 800, velocity_mps = 30000):
     body = pymunk.Body(mass_kg, 1, pymunk.Body.DYNAMIC)
     body.position = (pos_x, pos_y)
     body.velocity = (0, velocity_mps / CONST_M_PER_PIXEL)
@@ -57,14 +57,11 @@ def rendertrail(trail):
         obj = trail[i]
         pygame.draw.circle(screen, (50, 50, 80), (int(obj.body.position.x), int(obj.body.position.y)), obj.radius/2)
 
-def run(star, planet):
+def run(screen, clock, main, star, planet):
     trail = []
     trail_render_speed = 10
     trail_count = 0
     while True:
-        screen_width = screen.get_width()
-        screen_height = screen.get_height()
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -85,10 +82,11 @@ def run(star, planet):
         space.step(14400)
         clock.tick(120)
 
-def main():
-    star = create_star()
-    planet = create_planet(velocity_mps=30000)
-    run(star, planet)
+def main(screen, clock, main):
+    star = create_star(pos_x=screen.get_width() / 2, pos_y = screen.get_height() / 2)
+    planet = create_planet(pos_x=screen.get_width() / 2 - CONST_M_PER_AU / CONST_M_PER_PIXEL, pos_y = screen.get_height() / 2, velocity_mps=30000)
+    run(screen, clock, main, star, planet)
 
 if __name__ == "__main__":
-    main()
+    screen, clock, space = init()
+    main(screen, clock, main)

@@ -4,11 +4,13 @@ BLACK = pygame.Color("black")
 GREY = pygame.Color("grey")
 WHITE = pygame.Color("white")
 
-pygame.init()
-screen = pygame.display.set_mode((800, 800), pygame.RESIZABLE)
-clock = pygame.time.Clock()
-space = pymunk.Space()
-space.gravity = (0, 98.1)
+def init():
+    pygame.init()
+    screen = pygame.display.set_mode((800, 800), pygame.RESIZABLE)
+    clock = pygame.time.Clock()
+    space = pymunk.Space()
+    space.gravity = (0, 98.1)
+    return screen, clock, space
 
 def create_circle(space, mass=10, moment=100, x=400, y=0, radius=40, nudge_x=False):
     body = pymunk.Body(mass, moment, pymunk.Body.DYNAMIC)
@@ -19,7 +21,7 @@ def create_circle(space, mass=10, moment=100, x=400, y=0, radius=40, nudge_x=Fal
         body.apply_force_at_local_point((random.randrange(-100 * mass, 100 * mass), 0))
     return shape
 
-def draw_circles(circles):
+def draw_circles(screen, circles):
     for circle in circles:
         pos_x = int(circle.body.position.x)
         pos_y = int(circle.body.position.y)
@@ -31,7 +33,7 @@ def create_bound(space, a_x, a_y, b_x, b_y, radius):
     space.add(body, shape)
     return shape
 
-def draw_bounds(bounds):
+def draw_bounds(screen, bounds):
     for bound in bounds:
         a_x = int(bound.a.x)
         a_y = int(bound.a.y)
@@ -39,7 +41,7 @@ def draw_bounds(bounds):
         b_y = int(bound.b.y)
         pygame.draw.line(screen, BLACK, (a_x, a_y), (b_x, b_y), int(bound.radius))
 
-def run(circles, bounds):
+def run(screen, clock, space, circles, bounds):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -47,21 +49,21 @@ def run(circles, bounds):
                 sys.exit()
 
         screen.fill((255, 255, 255))
-        draw_circles(circles)
-        draw_bounds(bounds)
+        draw_circles(screen, circles)
+        draw_bounds(screen, bounds)
         space.step(1.0/60.0)
         pygame.display.update()
         pygame.display.set_caption("fps: " + str(clock.get_fps()))
         clock.tick(120)
 
-def slope():
+def slope(screen, clock, space):
     circles = []
     circles.append(create_circle(space, x=700, nudge_x=True))
     bounds = []
     bounds.append(create_bound(space, 400, 500, 700, 400, 10))
-    run(circles, bounds)
+    run(screen, clock, space, circles, bounds)
 
-def scatter(num_circles=100):
+def scatter(screen, clock, space, num_circles=100):
     circles = []
     for _ in range(num_circles):
         circles.append(create_circle(space, 1, 10, random.randint(100, 700), random.randint(0, 100), 15, False))
@@ -69,10 +71,11 @@ def scatter(num_circles=100):
     bounds.append(create_bound(space, 100, 700, 700, 700, 5))
     bounds.append(create_bound(space, 50, 400, 100, 700, 5))
     bounds.append(create_bound(space, 700, 700, 750, 400, 5))
-    run(circles, bounds)
+    run(screen, clock, space, circles, bounds)
 
 def main():
-    scatter(300)
+    screen, clock, space = init()
+    scatter(screen, clock, space, 300)
 
 if __name__ == "__main__":
     main()
