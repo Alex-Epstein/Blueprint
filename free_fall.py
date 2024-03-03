@@ -1,9 +1,8 @@
 import pymunk, pygame, sys, random
 
-BLACK = pygame.Color(0, 0, 0)
-LIGHT_GREY = pygame.Color(200, 200, 200)
-DARK_GREY = pygame.Color(100, 100, 100)
-WHITE = pygame.Color(255, 255, 255)
+BLACK = pygame.Color("black")
+GREY = pygame.Color("grey")
+WHITE = pygame.Color("white")
 
 pygame.init()
 screen = pygame.display.set_mode((800, 800), pygame.RESIZABLE)
@@ -23,7 +22,7 @@ def draw_circles(circles):
     for circle in circles:
         pos_x = int(circle.body.position.x)
         pos_y = int(circle.body.position.y)
-        pygame.draw.circle(screen, DARK_GREY, (pos_x, pos_y), circle.radius)
+        pygame.draw.circle(screen, GREY, (pos_x, pos_y), circle.radius)
 
 def create_bound(space, a_x, a_y, b_x, b_y, radius):
     body = pymunk.Body(0, 0, pymunk.Body.STATIC)
