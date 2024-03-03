@@ -15,7 +15,8 @@ def create_circle(space, mass=10, moment=100, x=400, y=0, radius=40, nudge_x=Fal
     body.position = (x, y)
     shape = pymunk.Circle(body, radius)
     space.add(body, shape)
-    body.apply_force_at_local_point((random.randrange(-100 * mass, 100 * mass), 0))
+    if nudge_x:
+        body.apply_force_at_local_point((random.randrange(-100 * mass, 100 * mass), 0))
     return shape
 
 def draw_circles(circles):
