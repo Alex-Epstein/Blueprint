@@ -69,5 +69,6 @@ def run(window, width, height):
 
 	pygame.quit()
 
+# Calculations
 if __name__ == "__main__":
-	run(window, WIDTH, HEIGHT)
+	run(window, WIDTH, HEIGHT) # runs pygame simulation
