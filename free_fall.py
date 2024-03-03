@@ -61,9 +61,11 @@ def slope():
 def scatter(num_circles=100):
     circles = []
     for i in range(num_circles):
-        circles.append(create_circle(space, 1, 10, random.randint(100, 700), random.randint(0, 100), 5, False))
+        circles.append(create_circle(space, 1, 10, random.randint(100, 700), random.randint(0, 100), 20, False))
     bounds = []
     bounds.append(create_bound(space, 100, 700, 700, 700, 5))
+    bounds.append(create_bound(space, 50, 400, 100, 700, 5))
+    bounds.append(create_bound(space, 700, 700, 750, 400, 5))
 
     while True:
         for event in pygame.event.get():
@@ -76,10 +78,11 @@ def scatter(num_circles=100):
         draw_bounds(bounds)
         space.step(1.0/60.0)
         pygame.display.update()
+        pygame.display.set_caption("fps: " + str(clock.get_fps()))
         clock.tick(120)
 
 def main():
-    scatter(1000)
+    scatter(300)
 
 if __name__ == "__main__":
     main()
