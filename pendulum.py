@@ -35,7 +35,7 @@ def create_pendulum(space):
 	body = pymunk.Body()
 	body.position = (WIDTH/2, HEIGHT/5)
 	line = pymunk.Segment(body, (0, 0), (bob_x, bob_y), 5) # draws line relative to body (static point)
-	bob = pymunk.Circle(body, r, (bob_x, bob_y))
+	bob = pymunk.Circle(body, r, (bob_x, bob_y)) # puts the bob at the end of the line
 	line.friction = 1
 	bob.friction = 1
 	line.mass = 8
