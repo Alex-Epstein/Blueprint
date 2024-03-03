@@ -3,12 +3,13 @@ import pymunk
 import pymunk.pygame_util
 import math
 
+def init():
+	pygame.init()
 
-pygame.init()
-
-area = pygame.display.set_mode().get_rect() # Default to screen resolution
-WIDTH, HEIGHT = area[2], area[3]
-window = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
+	area = pygame.display.set_mode().get_rect() # Default to screen resolution
+	WIDTH, HEIGHT = area[2], area[3]
+	window = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
+	return area, WIDTH, HEIGHT, window
 
 def draw(space, window, draw_options):
 	window.fill("white")
@@ -16,7 +17,7 @@ def draw(space, window, draw_options):
 	pygame.display.update()
 
 
-def create_pendulum(space):
+def create_pendulum(space, WIDTH, HEIGHT):
 	# values inputted
 	r = 80 #cm  
 	m = 1000 #grams 
@@ -53,7 +54,7 @@ def run(window, width, height):
 	space = pymunk.Space()
 	space.gravity = (0, 981) # cm/s^2 ? 
 
-	create_pendulum(space)
+	create_pendulum(space, width, height)
 
 	draw_options = pymunk.pygame_util.DrawOptions(window)
 
@@ -69,6 +70,10 @@ def run(window, width, height):
 
 	pygame.quit()
 
+def main():
+	area, WIDTH, HEIGHT, window = init()
+	run(window, WIDTH, HEIGHT) # runs pygame simulation
+
 # Calculations
 if __name__ == "__main__":
-	run(window, WIDTH, HEIGHT) # runs pygame simulation
+	main()

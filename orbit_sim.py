@@ -17,7 +17,7 @@ def init():
     space.gravity = (0.0, 0.0)
     return screen, clock, space
 
-def create_star(mass_kg = CONST_MASS_SUN_KG, radius_m = CONST_RADIUS_SUN_M, pos_x = 800, pos_y = 800):
+def create_star(space, mass_kg = CONST_MASS_SUN_KG, radius_m = CONST_RADIUS_SUN_M, pos_x = 800, pos_y = 800):
     body = pymunk.Body(mass_kg, 1, pymunk.Body.DYNAMIC)
     body.position = (pos_x, pos_y)
     radius_px = radius_m / CONST_M_PER_PIXEL
@@ -25,7 +25,7 @@ def create_star(mass_kg = CONST_MASS_SUN_KG, radius_m = CONST_RADIUS_SUN_M, pos_
     space.add(body, shape)
     return shape
 
-def create_planet(mass_kg = CONST_MASS_EARTH_KG, radius_m = CONST_RADIUS_EARTH_M, pos_x = 800 - CONST_M_PER_AU / CONST_M_PER_PIXEL, pos_y = 800, velocity_mps = 30000):
+def create_planet(space, mass_kg = CONST_MASS_EARTH_KG, radius_m = CONST_RADIUS_EARTH_M, pos_x = 800 - CONST_M_PER_AU / CONST_M_PER_PIXEL, pos_y = 800, velocity_mps = 30000):
     body = pymunk.Body(mass_kg, 1, pymunk.Body.DYNAMIC)
     body.position = (pos_x, pos_y)
     body.velocity = (0, velocity_mps / CONST_M_PER_PIXEL)
@@ -35,7 +35,7 @@ def create_planet(mass_kg = CONST_MASS_EARTH_KG, radius_m = CONST_RADIUS_EARTH_M
     space.add(body, shape)
     return shape
 
-def render(star, planet):
+def render(screen, star, planet):
     pygame.draw.circle(screen, (255, 255, 0), (int(star.body.position.x), int(star.body.position.y)), int(star.radius))
     pygame.draw.circle(screen, (0, 78, 255), (int(planet.body.position.x), int(planet.body.position.y)), int(planet.radius))
 
@@ -50,14 +50,14 @@ def do_physics(star, planet):
     force = calculate_gravity(planet.body, star.body)
     planet.body.apply_force_at_local_point(force)
 
-def rendertrail(trail):
+def rendertrail(screen, trail):
     while len(trail) > 100:
         trail.remove(trail[0])
     for i in range(len(trail)):
         obj = trail[i]
         pygame.draw.circle(screen, (50, 50, 80), (int(obj.body.position.x), int(obj.body.position.y)), obj.radius/2)
 
-def run(screen, clock, main, star, planet):
+def run(screen, clock, space, star, planet):
     trail = []
     trail_render_speed = 10
     trail_count = 0
@@ -73,8 +73,8 @@ def run(screen, clock, main, star, planet):
         else:
             trail_count = 0
             trail.append(copy.deepcopy(planet))
-        rendertrail(trail)
-        render(star, planet)
+        rendertrail(screen, trail)
+        render(screen, star, planet)
         pygame.display.update()
 
         do_physics(star, planet)
@@ -82,11 +82,11 @@ def run(screen, clock, main, star, planet):
         space.step(14400)
         clock.tick(120)
 
-def main(screen, clock, main):
-    star = create_star(pos_x=screen.get_width() / 2, pos_y = screen.get_height() / 2)
-    planet = create_planet(pos_x=screen.get_width() / 2 - CONST_M_PER_AU / CONST_M_PER_PIXEL, pos_y = screen.get_height() / 2, velocity_mps=30000)
-    run(screen, clock, main, star, planet)
+def main():
+    screen, clock, space = init()
+    star = create_star(space, pos_x=screen.get_width() / 2, pos_y = screen.get_height() / 2)
+    planet = create_planet(space, pos_x=screen.get_width() / 2 - CONST_M_PER_AU / CONST_M_PER_PIXEL, pos_y = screen.get_height() / 2, velocity_mps=30000)
+    run(screen, clock, space, star, planet)
 
 if __name__ == "__main__":
-    screen, clock, space = init()
-    main(screen, clock, main)
+    main()

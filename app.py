@@ -2,11 +2,11 @@ from tkinter import *
 import chatgpt_api_call
 import free_fall_sim
 import orbit_sim
-# import pend_sim
-# import projectile_motion_sim
+import pend_sim
+import projectile_motion_sim
 
 win = Tk()
-win.geometry("500x200")
+win.geometry("1000x200")
 
 options = [
     "Free fall",
@@ -23,7 +23,15 @@ drop.pack()
 def submit():
     user_in = entry.get() #gets entry text
     print(user_in)
-    free_fall_sim.main()
+    type = clicked.get()
+    if type == "Free fall":
+        free_fall_sim.main()
+    elif type == "Orbit":
+        orbit_sim.main()
+    elif type == "Pendulum":
+        pend_sim.main()
+    elif type == "Projectile motion":
+        projectile_motion_sim.main()
     #chatgpt_api_call.parse(user_in)
 
 
