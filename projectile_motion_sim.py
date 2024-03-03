@@ -34,7 +34,7 @@ def run(circles):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                for _ in range(100):
+                for _ in range(5):
                     circles.append(create_projectile(space, x=random.randint(0, width), y=random.randint(0, height), v_x=random.randint(0, 100), v_y=-random.randint(0, 200), radius=10))
 
         screen.fill((255, 255, 255))

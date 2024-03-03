@@ -64,7 +64,7 @@ def slope():
 def scatter(num_circles=100):
     circles = []
     for _ in range(num_circles):
-        circles.append(create_circle(space, 1, 10, random.randint(100, 700), random.randint(0, 100), 20, False))
+        circles.append(create_circle(space, 1, 10, random.randint(100, 700), random.randint(0, 100), 15, False))
     bounds = []
     bounds.append(create_bound(space, 100, 700, 700, 700, 5))
     bounds.append(create_bound(space, 50, 400, 100, 700, 5))
