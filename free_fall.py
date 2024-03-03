@@ -39,34 +39,7 @@ def draw_bounds(bounds):
         b_y = int(bound.b.y)
         pygame.draw.line(screen, BLACK, (a_x, a_y), (b_x, b_y), int(bound.radius))
 
-def slope():
-    circles = []
-    circles.append(create_circle(space, x=700, nudge_x=True))
-    bounds = []
-    bounds.append(create_bound(space, 400, 500, 700, 400, 10))
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-        screen.fill((255, 255, 255))
-        draw_circles(circles)
-        draw_bounds(bounds)
-        space.step(1.0/60.0)
-        pygame.display.update()
-        clock.tick(120)
-
-def scatter(num_circles=100):
-    circles = []
-    for i in range(num_circles):
-        circles.append(create_circle(space, 1, 10, random.randint(100, 700), random.randint(0, 100), 20, False))
-    bounds = []
-    bounds.append(create_bound(space, 100, 700, 700, 700, 5))
-    bounds.append(create_bound(space, 50, 400, 100, 700, 5))
-    bounds.append(create_bound(space, 700, 700, 750, 400, 5))
-
+def run(circles, bounds):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -80,6 +53,23 @@ def scatter(num_circles=100):
         pygame.display.update()
         pygame.display.set_caption("fps: " + str(clock.get_fps()))
         clock.tick(120)
+
+def slope():
+    circles = []
+    circles.append(create_circle(space, x=700, nudge_x=True))
+    bounds = []
+    bounds.append(create_bound(space, 400, 500, 700, 400, 10))
+    run(circles, bounds)
+
+def scatter(num_circles=100):
+    circles = []
+    for _ in range(num_circles):
+        circles.append(create_circle(space, 1, 10, random.randint(100, 700), random.randint(0, 100), 20, False))
+    bounds = []
+    bounds.append(create_bound(space, 100, 700, 700, 700, 5))
+    bounds.append(create_bound(space, 50, 400, 100, 700, 5))
+    bounds.append(create_bound(space, 700, 700, 750, 400, 5))
+    run(circles, bounds)
 
 def main():
     scatter(300)
